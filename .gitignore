@@ -2,3 +2,4 @@ python_poject/.env
 MCU_poject/rola_car/Drivers
 MCU_poject/rola_car/MDK-ARM
 MCU_poject/rola_car/Middlewares
+server/node_modules

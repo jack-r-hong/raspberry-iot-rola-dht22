@@ -16,6 +16,7 @@ REYAX896
 - RXD -> PA9
 - TXD -> PA10
 - GND -> GND
+
 DHT22
 - VDD -> 3V3
 - OUT -> PA12

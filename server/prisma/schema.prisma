@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Auth {
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    level    Int            @unique    @map("level")                 
+    role    Int            @map("role")                 
+    user User[]
+    
+    // custom begin Auth
+
+    // custom end Auth
+}
+model CarState {
+    alarm    Int            @map("alarm")                 
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    xAxios    Int            @map("x_axios")                 
+    yAxios    Int            @map("y_axios")                 
+    
+    // custom begin CarState
+
+    // custom end CarState
+}
+model Dht22 {
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    humi    Int            @map("humi")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    temp    Int            @map("temp")                 
+    
+    // custom begin DHT22
+
+    // custom end DHT22
+}
+model User {
+    createdAt    DateTime            @default(now())    @map("created_at")                 
+    email    String            @unique    @map("email")                 
+    id    Int        @id @default(autoincrement())    @map("id")                 
+    password    String            @map("password")                 
+    phone    String?            @map("phone")                 
+    updatedAt    DateTime            @default(now()) @updatedAt    @map("updated_at")                 
+    userStatus    Int            @map("user_status")                 
+    username    String            @unique    @map("username")                 
+    auth Auth? @relation(fields: [authLevel], references: [level])
+    authLevel Int @map("auth_level")
+    
+    // custom begin User
+
+    // custom end User
+}
+
+
+

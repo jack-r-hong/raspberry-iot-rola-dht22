@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  robot_server:
+    build: ./server
+    # restart: always
+    container_name: robot_server
+    ports:
+      - '4000:4000'
+    networks:
+      - backend
+    working_dir: /usr/src/app/
+    stdin_open: true
+    tty: true  
+    # command: npm run dev
+    volumes:
+      - ./server/src:/usr/src/app/src
+      - ./server/prisma:/usr/src/app/prisma 
+    env_file:
+      - .env    
+    depends_on: 
+      - db
+  db:
+    build: 
+      context: .
+      dockerfile: mysql.Dockerfile
+    # image: ibex/debian-mysql-server-5.7 
+    restart: always
+    # ports:
+    #   - 3306:3306
+    #   - 33060:33060
+    # volumes:
+    #   - my.cnf:/etc/mysql/conf.d/my.cnf
+      # - /path/to/mysql57/data:/var/lib/mysql
+    env_file:
+      - .env         
+    networks:
+      backend:
+        aliases:
+          - database
+  phpmyadmin:
+    image: arm32v7/phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - backend
+
+
+networks:
+  backend:
