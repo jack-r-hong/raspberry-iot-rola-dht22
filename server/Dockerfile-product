@@ -1,0 +1,90 @@
+FROM arm32v7/node as builder
+
+ENV NODE_NEV production
+
+WORKDIR /usr/src/app/
+
+ENV PRISMA_QUERY_ENGINE_BINARY /usr/src/app/prisma_bin/query-engine
+ENV PRISMA_QUERY_ENGINE_LIBRARY /usr/src/app/prisma_bin/libquery_engine-linux-arm-openssl-1.1.x.so.node
+ENV PRISMA_INTROSPECTION_ENGINE_BINARY /usr/src/app/prisma_bin/introspection-engine
+ENV PRISMA_MIGRATION_ENGINE_BINARY /usr/src/app/prisma_bin/migration-engine
+ENV PRISMA_FMT_BINARY /usr/src/app/prisma_bin/prisma-fmt
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE binary
+ENV PRISMA_QUERY_ENGINE_TYPE binary  
+
+COPY . .
+
+RUN apt-get -y install openssl wget &&\
+    mkdir prisma_bin &&\
+    wget -O prisma_bin/query-engine --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/query-engine &&\
+    wget -O prisma_bin/libquery_engine.so --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/libquery_engine.so &&\
+    wget -O prisma_bin/introspection-engine --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/introspection-engine &&\
+    wget -O prisma_bin/migration-engine --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/migration-engine &&\
+    wget -O prisma_bin/prisma-fmt --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/prisma-fmt 
+
+RUN chmod +x prisma_bin/query-engine &&\
+    chmod +x prisma_bin/libquery_engine.so &&\
+    chmod +x prisma_bin/introspection-engine &&\
+    chmod +x prisma_bin/migration-engine &&\
+    chmod +x prisma_bin/prisma-fmt &&\
+    mv prisma_bin/libquery_engine.so prisma_bin/libquery_engine-linux-arm-openssl-1.1.x.so.node  &&\
+    npm install --production=false
+
+RUN npx prisma generate &&\
+    npm run build
+
+# COPY package*.json ./
+# COPY src ./src
+# COPY nodemon.json ./
+# COPY prisma ./prisma
+
+
+# RUN npm install && \
+#     npm run build
+
+
+# ////////////////product////////////////
+FROM arm32v7/node as product
+
+ENV NODE_NEV production
+
+ENV PRISMA_QUERY_ENGINE_BINARY /usr/src/app/prisma_bin/query-engine
+ENV PRISMA_QUERY_ENGINE_LIBRARY /usr/src/app/prisma_bin/libquery_engine-linux-arm-openssl-1.1.x.so.node
+ENV PRISMA_INTROSPECTION_ENGINE_BINARY /usr/src/app/prisma_bin/introspection-engine
+ENV PRISMA_MIGRATION_ENGINE_BINARY /usr/src/app/prisma_bin/migration-engine
+ENV PRISMA_FMT_BINARY /usr/src/app/prisma_bin/prisma-fmt
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE binary
+ENV PRISMA_QUERY_ENGINE_TYPE binary  
+
+WORKDIR /usr/src/app/
+COPY --from=builder /usr/src/app/dist . 
+COPY package.json .
+RUN mkdir prisma_bin
+COPY --from=builder /usr/src/app/prisma_bin ./prisma_bin
+COPY --from=builder /usr/src/app/prisma ./prisma
+
+# RUN apt-get update
+RUN apt-get -y install openssl wget &&\
+    chmod +x prisma_bin/query-engine &&\
+    chmod +x prisma_bin/introspection-engine &&\
+    chmod +x prisma_bin/migration-engine &&\
+    chmod +x prisma_bin/prisma-fmt 
+RUN npm install --production
+RUN npx prisma generate
+
+
+
+
+
+
+
+# RUN npm i
+# RUN npx prisma generate 
+#     # && npx migrate dev --name init
+# RUN  npx prisma migrate dev --name init
+
+# FROM base as production
+
+# ENV NODE_PATH=./build
+
+# RUN npm run build

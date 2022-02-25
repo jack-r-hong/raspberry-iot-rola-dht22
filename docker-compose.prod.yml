@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  robot_server:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile-product
+    restart: always
+    container_name: robot_server
+    # stdin_open: true
+    # tty: true  
+    networks:
+      - backend
+    working_dir: /usr/src/app/
+    env_file:
+      - .env    
+    depends_on: 
+      - db
+    command: node server
+  phpmyadmin:
+    image: arm32v7/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - backend
+
+

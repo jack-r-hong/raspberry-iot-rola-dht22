@@ -1,24 +1,20 @@
 const path = require('path');
-// webpack中所有配置信息都应该写在module.exports中
+const nodeExternals = require('webpack-node-externals');
+
 module.exports = {
-  // 入口文件
   entry: './src/index.ts',
-  // 指定打包文件输出的路径
+  target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    // 打包后的文件
-    filename: 'bundle.js',
+    filename: 'server.js',
   },
-  // 指定webpack打包时使用的模块
+  externals: [ nodeExternals() ],
+  resolve: { extensions: [".ts", ".js"] },
   module: {
-    // 指定要加载的规则
     rules: [
       {
-        // :指定的是规则生效的文件
         test: /\.ts$/,
-        // 要使用的loader
         use: 'ts-loader',
-        // 要排除的文件
         exclude: /node-modules/,
       },
     ],
