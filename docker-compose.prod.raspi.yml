@@ -4,11 +4,9 @@ services:
   server:
     build: 
       context: ./server
-      dockerfile: Dockerfile-product
+      dockerfile: Dockerfile-product-raspi
     restart: always
     container_name: server
-    # stdin_open: true
-    # tty: true  
     networks:
       - backend
     working_dir: /usr/src/app/
@@ -16,7 +14,7 @@ services:
       - .env    
     depends_on: 
       - db
-    command: node server
+    command: npm start
   phpmyadmin:
     image: arm32v7/phpmyadmin
     restart: always

@@ -1,10 +1,10 @@
 version: '3.9'
 
 services:
-  robot_server:
+  server:
     build: ./server
     # restart: always
-    container_name: robot_server
+    container_name: server
     ports:
       - '4000:4000'
     networks:
@@ -20,6 +20,11 @@ services:
       context: .
       dockerfile: mysql.Dockerfile
     restart: always
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     env_file:
       - .env         
     networks:

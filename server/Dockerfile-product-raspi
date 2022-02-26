@@ -1,0 +1,33 @@
+FROM arm32v7/node as product
+
+ENV NODE_NEV production
+
+ENV PRISMA_QUERY_ENGINE_BINARY /usr/src/app/prisma_bin/query-engine
+ENV PRISMA_QUERY_ENGINE_LIBRARY /usr/src/app/prisma_bin/libquery_engine.so 
+ENV PRISMA_INTROSPECTION_ENGINE_BINARY /usr/src/app/prisma_bin/introspection-engine
+ENV PRISMA_MIGRATION_ENGINE_BINARY /usr/src/app/prisma_bin/migration-engine
+ENV PRISMA_FMT_BINARY /usr/src/app/prisma_bin/prisma-fmt
+ENV PRISMA_CLI_QUERY_ENGINE_TYPE binary
+ENV PRISMA_QUERY_ENGINE_TYPE binary  
+
+WORKDIR /usr/src/app/
+COPY dist . 
+COPY package.json .
+COPY prisma ./prisma
+
+RUN apt-get -y install openssl wget &&\
+    mkdir prisma_bin &&\
+    wget -O prisma_bin/query-engine --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/query-engine &&\
+    wget -O prisma_bin/libquery_engine.so --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/libquery_engine.so &&\
+    wget -O prisma_bin/introspection-engine --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/introspection-engine &&\
+    wget -O prisma_bin/migration-engine --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/migration-engine &&\
+    wget -O prisma_bin/prisma-fmt --quiet https://github.com/pantharshit00/prisma-rpi-builds/releases/download/3.2.1/prisma-fmt 
+
+RUN chmod +x prisma_bin/query-engine &&\
+    chmod +x prisma_bin/introspection-engine &&\
+    chmod +x prisma_bin/migration-engine &&\
+    chmod +x prisma_bin/prisma-fmt 
+RUN npm install --production
+RUN npx prisma generate
+
+

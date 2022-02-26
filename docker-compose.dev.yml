@@ -1,12 +1,12 @@
 version: '3.9'
 
 services:
-  robot_server:
+  server:
     build: 
       context: ./server
       dockerfile: Dockerfile-product
     restart: always
-    container_name: robot_server
+    container_name: server
     networks:
       - backend
     working_dir: /usr/src/app/
