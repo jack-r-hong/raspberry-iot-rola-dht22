@@ -12,7 +12,8 @@
     "mig-dev": "prisma migrate dev --name ",
     "mig-dep": "prisma migrate deploy",
     "gen": "prisma generate ",
-    "lint": "eslint src/*.ts"
+    "lint": "eslint src/*.ts",
+    "raspi-dev": "node dist/src/index"
   },
   "author": "",
   "license": "ISC",
@@ -67,6 +68,10 @@
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.1.6",
     "typedi": "^0.10.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "raspi": "^6.0.1",
+    "raspi-serial": "^6.0.0"
+    
+
   }
 }

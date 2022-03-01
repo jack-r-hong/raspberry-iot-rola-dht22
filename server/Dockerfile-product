@@ -30,6 +30,9 @@ RUN chmod +x prisma_bin/query-engine &&\
     mv prisma_bin/libquery_engine.so prisma_bin/libquery_engine-linux-arm-openssl-1.1.x.so.node  &&\
     npm install --production=false
 
+
+COPY src ./src
+
 RUN npx prisma generate &&\
     npm run build
 

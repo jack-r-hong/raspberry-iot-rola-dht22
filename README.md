@@ -22,5 +22,9 @@ DHT22
 - OUT -> PA12
 - GND -> GND
 
+# 開發環境-流程
+## docker內 apt-update 指令錯誤處理
+cd /tmp;wget http://ftp.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.5.3-2_armhf.deb;sudo dpkg -i libseccomp2_2.5.3-2_armhf.deb
+
 # 成果
 ![alt text](./doc/database_result.jpg)

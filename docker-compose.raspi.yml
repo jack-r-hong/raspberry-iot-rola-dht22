@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  server:
+    build: ./server
+    # restart: always
+    container_name: server
+    ports:
+      - '4000:4000'
+    networks:
+      - backend
+    working_dir: /usr/src/app/
+    devices:
+      - "/dev/ttyAMA0:/dev/ttyAMA0"      
+    # command: npm run dev
+    env_file:
+      - .env    
+    depends_on: 
+      - db
+  db:
+    build: 
+      context: .
+      dockerfile: mysql.Dockerfile
+    restart: always
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    env_file:
+      - .env         
+    networks:
+      backend:
+        aliases:
+          - database
+
+
+networks:
+  backend:

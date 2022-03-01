@@ -5,18 +5,19 @@ services:
     build: 
       context: ./server
       dockerfile: Dockerfile-product
-    restart: always
+    # restart: always
     container_name: server
     # stdin_open: true
     # tty: true  
     networks:
       - backend
-    working_dir: /usr/src/app/
+    working_dir: /usr/src/app
     env_file:
       - .env    
     depends_on: 
       - db
-    command: node server
+    # command: node server
+    command: /bin/bash
   phpmyadmin:
     image: arm32v7/phpmyadmin
     restart: always
