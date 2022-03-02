@@ -43,6 +43,7 @@ export class ExpressApp {
     const corsOptions: cors.CorsOptions = {
       allowedHeaders: [
         'Origin',
+        'Access-Control-Allow-Origin',
         'X-Requested-With',
         'Content-Type',
         'Accept',
@@ -50,7 +51,8 @@ export class ExpressApp {
       ],
       credentials: true,
       methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-      origin: '127.0.0.1',
+      // origin: '127.0.0.1',
+      origin: '*',
       preflightContinue: false,
     };
     this.app.use(helmet());

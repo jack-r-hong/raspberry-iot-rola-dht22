@@ -13,6 +13,17 @@ export class RobotService {
   constructor(
         private robotModel: RobotModel,
   ) {}
+
+  async readManyDHTData(
+      param :requestTypes.ReadManyDHTDataRequest,
+  ) {
+    const res = await this.robotModel.readManyDHTData(
+        param,
+    ).catch((e) =>{
+      throw e;
+    });
+    return res;
+  }
   async readOneDHTData(
       param :requestTypes.ReadOneDHTDataRequest,
   ) {

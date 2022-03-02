@@ -7,6 +7,25 @@ const prisma = new PrismaClient();
 
 @Service()
 export class RobotModel {
+  async readManyDHTData(
+      param: requestTypes.ReadManyDHTDataRequest,
+  ) {
+    const result: Dht22[] | null = await prisma.dht22.findMany({
+      // where: {
+      //   id: param.pathId,
+      // },
+    }).catch((e) => {
+      throw e;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+    if (result === null) {
+      throw new errors.NotFindError;
+    }
+    return result;
+  }
+
   async readOneDHTData(
       param: requestTypes.ReadOneDHTDataRequest,
   ) {

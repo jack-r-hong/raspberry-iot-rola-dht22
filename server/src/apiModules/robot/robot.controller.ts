@@ -10,6 +10,26 @@ const serviceInstance = Container.get(RobotService);
 export class RobotController {
   constructor(private app: Application) {}
 
+  @Get('/dht')
+  async readManyDHTData(
+      req: Request,
+      res: Response,
+      next: NextFunction,
+  ) {
+    serviceInstance.readManyDHTData(
+        robotParams.ReadManyDHTDataRequestConvert(
+            req.body,
+            req.query,
+            req.params,
+        ),
+    )
+        .then((result) =>{
+          res.json(result);
+        }).catch((e) => {
+          next(e);
+        });
+  }
+
   @Get('/dht/:id')
   @Validator(validSchemas.readOneDHTDataValidator)
   async readOneDHTData(

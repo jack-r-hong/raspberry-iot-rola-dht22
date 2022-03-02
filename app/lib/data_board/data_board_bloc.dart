@@ -16,16 +16,40 @@ class DataBoardBloc extends Bloc<DataBoardEvent, DataBoardState> {
   DataBoardBloc._internal()
       : super(UnDataBoardState(0, DataBoardReadDataModel([], []))) {
     on<DataBoardEvent>((event, emit) {
-      return emit.forEach<DataBoardState>(
-        event.applyAsync(currentState: state, bloc: this),
-        onData: (state) => state,
-        onError: (error, stackTrace) {
-          developer.log('$error',
-              name: 'DataBoardBloc', error: error, stackTrace: stackTrace);
-          return ErrorDataBoardState(
-              0, DataBoardReadDataModel([], []), error.toString());
-        },
-      );
+      // return emit.forEach<DataBoardState>(
+      //   event.applyAsync(currentState: state, bloc: this),
+      //   onData: (state) => state,
+      //   onError: (error, stackTrace) {
+      //     developer.log('$error',
+      //         name: 'DataBoardBloc', error: error, stackTrace: stackTrace);
+      //     return ErrorDataBoardState(
+      //         0, DataBoardReadDataModel([], []), error.toString());
+      //   },
+      // );
+
+      if (DataBoardState is UnDataBoardState) {
+        return emit.forEach<DataBoardState>(
+          event.applyAsync(currentState: state, bloc: this),
+          onData: (state) => state,
+          onError: (error, stackTrace) {
+            developer.log('$error',
+                name: 'DataBoardBloc', error: error, stackTrace: stackTrace);
+            return ErrorDataBoardState(
+                0, DataBoardReadDataModel([], []), error.toString());
+          },
+        );
+      } else {
+        return emit.forEach<DataBoardState>(
+          event.applyAsync(currentState: state, bloc: this),
+          onData: (state) => state,
+          onError: (error, stackTrace) {
+            developer.log('$error',
+                name: 'DataBoardBloc', error: error, stackTrace: stackTrace);
+            return ErrorDataBoardState(
+                0, DataBoardReadDataModel([], []), error.toString());
+          },
+        );
+      }
     });
   }
 

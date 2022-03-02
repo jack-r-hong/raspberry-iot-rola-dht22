@@ -1,4 +1,16 @@
 
+export type ReadManyDHTDataRequest = {
+}
+
+export const ReadManyDHTDataRequestConvert = (
+    body: any,
+    query: any,
+    path: any,
+) => {
+  return {
+  };
+};
+
 export type ReadOneDHTDataRequest = {
     pathId: number
 }

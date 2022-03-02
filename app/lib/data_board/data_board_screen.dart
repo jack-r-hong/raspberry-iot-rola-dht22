@@ -95,7 +95,7 @@ class DataBoardScreenState extends State<DataBoardScreen> {
                         child: Text(
                           "溼度: " +
                               currentState.data
-                                  .temp[currentState.data.humi.length - 1].val
+                                  .humi[currentState.data.humi.length - 1].val
                                   .toString(),
                           style: TextStyle(
                             color: Colors.black,
@@ -109,6 +109,9 @@ class DataBoardScreenState extends State<DataBoardScreen> {
                 BootstrapRow(children: [
                   BootstrapCol(
                     child: SfCartesianChart(
+                        primaryYAxis: NumericAxis(
+                            // X axis is hidden now
+                            isVisible: false),
                         primaryXAxis: DateTimeAxis(
                           intervalType: DateTimeIntervalType.minutes,
                         ),
@@ -116,27 +119,39 @@ class DataBoardScreenState extends State<DataBoardScreen> {
                         title: ChartTitle(text: '溫濕度圖表'),
                         // Enable legend
                         legend: Legend(isVisible: true),
+                        axes: [
+                          NumericAxis(
+                              name: 'yAxisHumi',
+                              opposedPosition: true,
+                              title: AxisTitle(text: '溼度(%)')),
+                          NumericAxis(
+                              name: 'yAxisTemp',
+                              opposedPosition: false,
+                              title: AxisTitle(text: '溫度(°C)')),
+                        ],
                         // Enable tooltip
                         tooltipBehavior: TooltipBehavior(enable: true),
                         series: <ChartSeries<DataBoardSensorData, DateTime>>[
                           LineSeries<DataBoardSensorData, DateTime>(
-                              dataSource: currentState.data.temp,
-                              xValueMapper: (DataBoardSensorData d, _) =>
-                                  d.time,
-                              yValueMapper: (DataBoardSensorData d, _) => d.val,
-                              name: '溫度',
-                              // Enable data label
-                              dataLabelSettings:
-                                  DataLabelSettings(isVisible: true)),
+                            dataSource: currentState.data.temp,
+                            xValueMapper: (DataBoardSensorData d, _) => d.time,
+                            yValueMapper: (DataBoardSensorData d, _) => d.val,
+                            name: '溫度(°C)',
+                            yAxisName: 'yAxisTemp',
+                            // Enable data label
+                            // dataLabelSettings:
+                            //     DataLabelSettings(isVisible: true)
+                          ),
                           LineSeries<DataBoardSensorData, DateTime>(
-                              dataSource: currentState.data.humi,
-                              xValueMapper: (DataBoardSensorData d, _) =>
-                                  d.time,
-                              yValueMapper: (DataBoardSensorData d, _) => d.val,
-                              name: '溼度',
-                              // Enable data label
-                              dataLabelSettings:
-                                  DataLabelSettings(isVisible: true)),
+                            dataSource: currentState.data.humi,
+                            xValueMapper: (DataBoardSensorData d, _) => d.time,
+                            yValueMapper: (DataBoardSensorData d, _) => d.val,
+                            name: '溼度(%)',
+                            yAxisName: 'yAxisHumi',
+                            // Enable data label
+                            // dataLabelSettings:
+                            //     DataLabelSettings(isVisible: true)
+                          ),
                         ]),
                   )
                 ]),
