@@ -1,6 +1,7 @@
 # raspberry-iot-rola-dht22
 # 說明
-## 使用raspberry-pi 3 當作接Rola收端接收溫度資料並存到mysql裡
+## 使用raspberry-pi 3 當作接Rola收端接收溫度資料並存到mysql裡，之後利用nodejs server作為api server 讀取mysql資料，web poll api server 每2秒更新一次圖表。
+
 
 # pi接線圖
 ![alt text](./doc/raspberry_connect.jpg)
@@ -52,4 +53,4 @@ cd /tmp;wget http://ftp.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_
 
 # 成果
 ![alt text](./doc/database_result.jpg)
-[![IMAGE ALT TEXT HERE](./doc/app_result.jpg)](./doc/app_result.mp4)
+![alt text](./doc/app_result.gif)
