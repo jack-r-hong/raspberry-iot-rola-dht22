@@ -13,7 +13,7 @@ export function Controller(mainPath: string) {
         super(...args);
         const app :Application = args[0];
 
-        app.use(mainPath, subRouter);
+        app.use(`/api/${mainPath}`, subRouter);
       }
     };
   };

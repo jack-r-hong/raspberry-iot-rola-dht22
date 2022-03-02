@@ -19,6 +19,7 @@ services:
     build: 
       context: .
       dockerfile: mysql.Dockerfile
+    container_name: db
     restart: always
     environment:
       - MYSQL_USER=${MYSQL_USER}

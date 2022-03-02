@@ -13,7 +13,7 @@
     "mig-dep": "prisma migrate deploy",
     "gen": "prisma generate ",
     "lint": "eslint src/*.ts",
-    "raspi-dev": "node dist/src/index"
+    "raspi-dev": "npm run mig-dep && node dist/src/index"
   },
   "author": "",
   "license": "ISC",

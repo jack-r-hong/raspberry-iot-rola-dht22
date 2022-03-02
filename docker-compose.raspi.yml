@@ -3,16 +3,21 @@ version: '3.9'
 services:
   server:
     build: ./server
-    # restart: always
+    restart: always
     container_name: server
     ports:
       - '4000:4000'
     networks:
-      - backend
+      backend:
+        aliases:
+          - server
     working_dir: /usr/src/app/
     devices:
-      - "/dev/ttyAMA0:/dev/ttyAMA0"      
-    # command: npm run dev
+      - "/dev/ttyAMA0:/dev/ttyAMA0"   
+    volumes:
+      - ./server/dist:/usr/src/app/dist
+   
+    command: npm run raspi-dev
     env_file:
       - .env    
     depends_on: 
@@ -33,6 +38,35 @@ services:
       backend:
         aliases:
           - database
+  front: 
+    image: arm32v7/nginx 
+    # build: 
+    #   context: .
+    #   dockerfile: front.Dockerfile
+    container_name: front
+    ports:
+      - 8081:80
+    # environment:
+    # - NGINX_HOST=foobar.com
+    # - NGINX_PORT=80
+    volumes:
+      # - ./nginx.conf: nginx.conf:ro
+      - ./app/build/web:/usr/share/nginx/html
+      - ./templates:/etc/nginx/templates
+    command: [nginx-debug, '-g', 'daemon off;']
+    networks:
+      backend:
+        aliases:
+          - front
+  phpmyadmin:
+    image: arm32v7/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - backend
 
 
 networks:

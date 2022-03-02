@@ -10,11 +10,22 @@ services:
     networks:
       - backend
     working_dir: /usr/src/app/
+    devices:
+      - "/dev/ttyAMA0:/dev/ttyAMA0" 
     env_file:
       - .env    
     depends_on: 
       - db
-    command: npm start
+    command: npm raspi-dev
+  front: 
+    build: 
+      context: .
+      dockerfile: front.Dockerfile
+    container_name: front
+    ports:
+      - 8081:80
+    volumes:
+      - ./app/build/web:/usr/share/nginx/html
   phpmyadmin:
     image: arm32v7/phpmyadmin
     restart: always
